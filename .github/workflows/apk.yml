@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - index.html
+      - "**.html"
       - apk/**
       - .github/workflows/apk.yml
 permissions:
@@ -36,12 +36,14 @@ jobs:
           rm -rf www && mkdir www
           python3 - <<'PY'
           import glob, os
+          apk_dir = os.getcwd()
           src = '../index.html'
           if not os.path.exists(src):
-              found = sorted(glob.glob('../*.html'))
+              found = [p for p in glob.glob('../**/*.html', recursive=True)
+                       if not os.path.abspath(p).startswith(apk_dir) and 'node_modules' not in p]
               if not found:
-                  raise SystemExit("Aucun fichier .html a la racine du depot")
-              src = found[0]
+                  raise SystemExit("ERREUR : aucun fichier .html dans le depot. Deposez votre application (le fichier .html) dans le depot.")
+              src = max(found, key=os.path.getsize)
           s = open(src, encoding='utf-8').read()
           shim = open('native-shim.js', encoding='utf-8').read()
           i = s.lower().rfind('</body>')
@@ -49,7 +51,7 @@ jobs:
               raise SystemExit("Balise </body> introuvable")
           s = s[:i] + '<script>\n' + shim + '\n</script>\n' + s[i:]
           open('www/index.html', 'w', encoding='utf-8').write(s)
-          print('Source :', src)
+          print('Application utilisee :', src)
           PY
       - name: Créer le projet Android
         run: |
