@@ -27,7 +27,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
+      - name: Accepter les licences Android (SDK déjà installé sur le serveur)
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
       - name: Installer Capacitor
         run: npm install --no-audit --no-fund
       - name: Préparer l'application web
@@ -125,7 +126,9 @@ jobs:
           GRADLE
       - name: Compiler l'APK
         working-directory: apk/android
-        run: ./gradlew assembleRelease --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
       - name: Publier l'APK (page Releases)
         env:
           GH_TOKEN: ${{ github.token }}
