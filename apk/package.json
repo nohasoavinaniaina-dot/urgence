@@ -1,0 +1,13 @@
+{
+  "name": "ny-aina-meds-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ny Aina Med's Emergency & Intensive Care - application Android (Capacitor)",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  }
+}

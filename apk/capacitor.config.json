@@ -1,0 +1,7 @@
+{
+  "appId": "mg.nyaina.urgences",
+  "appName": "Ny Aina Med's",
+  "webDir": "www",
+  "backgroundColor": "#0b0f14",
+  "android": { "allowMixedContent": false }
+}
